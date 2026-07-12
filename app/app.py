@@ -309,7 +309,15 @@ elif page == "📊 Analytics":
     )
 
     df = pd.read_csv("../data/Students Social Media Addiction.csv")
+    def classify_addiction(score):
+        if score <= 4:
+            return "Low"
+        elif score <= 7:
+            return "Medium"
+        else:
+            return "High"
 
+    df["Addiction_Level"] = df["Addicted_Score"].apply(classify_addiction)
     st.subheader("Dataset Overview")
 
     col1, col2, col3 = st.columns(3)
@@ -328,3 +336,33 @@ elif page == "📊 Analytics":
     st.subheader("Dataset Preview")
 
     st.dataframe(df.head())
+
+    st.markdown("---")
+    st.subheader("📊 Addiction Level Distribution")
+
+    addiction_counts = df["Addiction_Level"].value_counts()
+
+    import matplotlib.pyplot as plt
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
+    ax.set_title(
+        "Distribution of Addiction Levels",
+        color="white",
+        fontsize=16,
+        fontweight="bold"
+    )
+
+    ax.set_xlabel("Addiction Level", color="white")
+    ax.set_ylabel("Number of Students", color="white")
+
+    ax.tick_params(colors="white")
+
+    addiction_counts.plot(kind="bar", ax=ax, color=["#2ecc71", "#f1c40f", "#e74c3c"])
+
+    ax.set_xlabel("Addiction Level")
+    ax.set_ylabel("Number of Students")
+    ax.set_title("Distribution of Addiction Levels")
+
+    st.pyplot(fig)
