@@ -5,6 +5,7 @@
 import streamlit as st
 import pandas as pd
 import pickle
+import requests
 
 # ==========================================
 # PAGE CONFIGURATION
@@ -203,17 +204,17 @@ if page == "🏠 Home":
             "Conflicts_Over_Social_Media": [conflicts_over_social_media]
         })
 
-        prediction = model.predict(input_data)
-        probabilities = model.predict_proba(input_data)
-        confidence = probabilities.max() * 100
+        # Send data to FastAPI
+        response = requests.post(
+            "http://127.0.0.1:8000/predict",
+            json=input_data.iloc[0].to_dict()
+        )
 
-        addiction_labels = {
-            0: "Low Addiction",
-            1: "Medium Addiction",
-            2: "High Addiction"
-        }
+        # Read the JSON response
+        prediction_result = response.json()
 
-        result = addiction_labels[prediction[0]]
+        result = prediction_result["prediction"]
+        confidence = prediction_result["confidence"]
 
     # ==========================================
     # RECOMMENDATIONS
