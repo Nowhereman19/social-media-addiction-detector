@@ -1,7 +1,7 @@
 # ==========================================
 # IMPORT LIBRARIES
 # ==========================================
-
+import seaborn as sns
 import streamlit as st
 import pandas as pd
 import pickle
@@ -337,7 +337,7 @@ elif page == "📊 Analytics":
     st.subheader("Dataset Preview")
 
     st.dataframe(df.head())
-
+# Addiction Level Distribution 
     st.markdown("---")
     st.subheader("📊 Addiction Level Distribution")
 
@@ -365,5 +365,102 @@ elif page == "📊 Analytics":
     ax.set_xlabel("Addiction Level")
     ax.set_ylabel("Number of Students")
     ax.set_title("Distribution of Addiction Levels")
+
+    st.pyplot(fig)
+
+# Most Used Social Media Platform
+    st.markdown("---")
+    st.subheader("📱 Most Used Social Media Platforms")
+
+    platform_counts = df["Most_Used_Platform"].value_counts()
+
+    fig, ax = plt.subplots(figsize=(10,6))
+
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
+
+    platform_counts.sort_values().plot(
+        kind="barh",
+        ax=ax,
+        color="skyblue"
+    )
+
+    ax.set_title(
+        "Most Used Social Media Platforms",
+        color="white",
+        fontsize=16,
+        fontweight="bold"
+    )
+
+    ax.set_xlabel("Number of Students", color="white")
+    ax.set_ylabel("Platform", color="white")
+
+    ax.tick_params(colors="white")
+
+    st.pyplot(fig)
+# Daily Social Media Usage Distribution 
+
+    st.markdown("---")
+    st.subheader("⏰ Daily Social Media Usage Distribution")
+
+    fig, ax = plt.subplots(figsize=(8,5))
+
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
+
+    ax.hist(
+        df["Avg_Daily_Usage_Hours"],
+        bins=10,
+        edgecolor="white"
+    )
+
+    ax.set_title(
+        "Distribution of Daily Social Media Usage",
+        color="white",
+        fontsize=16,
+        fontweight="bold"
+    )
+
+    ax.set_xlabel(
+        "Average Daily Usage Hours",
+        color="white"
+    )
+
+    ax.set_ylabel(
+        "Number of Students",
+        color="white"
+    )
+
+    ax.tick_params(colors="white")
+
+    st.pyplot(fig)
+# Correlation Heatmap 
+    st.markdown("---")
+    st.subheader("🔥 Feature Correlation Heatmap")
+
+    numeric_df = df.select_dtypes(include=["int64", "float64"])
+
+    fig, ax = plt.subplots(figsize=(10,8))
+
+    fig.patch.set_facecolor("none")
+    ax.set_facecolor("none")
+
+    sns.heatmap(
+        numeric_df.corr(),
+        annot=True,
+        cmap="coolwarm",
+        fmt=".2f",
+        linewidths=0.5,
+        ax=ax
+    )
+
+    ax.set_title(
+        "Correlation Between Numerical Features",
+        color="white",
+        fontsize=16,
+        fontweight="bold"
+    )
+
+    ax.tick_params(colors="white")
 
     st.pyplot(fig)
