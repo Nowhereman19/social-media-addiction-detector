@@ -4,9 +4,12 @@
 import seaborn as sns
 import streamlit as st
 import pandas as pd
-import pickle
 import requests
+from pathlib import Path
+import pickle
 
+BASE_DIR = Path(__file__).resolve().parent.parent
+MODEL_PATH = BASE_DIR / "models" / "addiction_model.pkl"
 # ==========================================
 # PAGE CONFIGURATION
 # ==========================================
@@ -21,7 +24,7 @@ st.set_page_config(
 # LOAD TRAINED MODEL
 # ==========================================
 
-with open("../models/addiction_model.pkl", "rb") as file:
+with open(MODEL_PATH, "rb") as file:
     model = pickle.load(file)
 
 # ==========================================
@@ -220,7 +223,7 @@ if page == "🏠 Home":
     # RECOMMENDATIONS
     # ==========================================
         st.markdown("---")
-        st.subheader("🧠 Prediction Results")
+        st.subheader(" Prediction Results")
 
         if result == "Low Addiction":
             st.success("🟢 LOW ADDICTION")
@@ -303,13 +306,14 @@ if page == "🏠 Home":
 
 elif page == "📊 Analytics":
 
-    st.title("📊 Dataset Analytics")
+    st.title(" Dataset Analytics")
 
     st.write(
         "Explore the dataset used to train the Social Media Addiction Detection model."
     )
 
-    df = pd.read_csv("../data/Students Social Media Addiction.csv")
+    DATA_PATH = BASE_DIR / "data" / "Students Social Media Addiction.csv"
+    df = pd.read_csv(DATA_PATH)
     def classify_addiction(score):
         if score <= 4:
             return "Low"
