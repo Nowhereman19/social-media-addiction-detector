@@ -209,7 +209,7 @@ if page == "🏠 Home":
 
         # Send data to FastAPI
         response = requests.post(
-            "http://127.0.0.1:8000/predict",
+            "https://social-media-addiction-detector-1.onrender.com/predict",
             json=input_data.iloc[0].to_dict()
         )
 
